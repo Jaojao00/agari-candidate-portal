@@ -1,0 +1,9 @@
+{
+  "name": "agari-candidate-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cổng tiếp nhận hồ sơ ứng viên - Công ty TNHH AGARI",
+  "scripts": {
+    "start": "serve ."
+  }
+}
