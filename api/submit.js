@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Chỉ chấp nhận phương thức POST' });
   }
 
-  // Webhook URL Google Apps Script Backend
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxmWsZUScOhwkdcn82w3GqJ4xY3G5j0fK9gXhZxTqXgXB0BcgFcmEezl4-rXTW0FFGr/exec';
+  // Webhook URL Google Apps Script Backend (Đã kích hoạt quyền công khai ANYONE_ANONYMOUS)
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKm_8s5btcRz4CGrpPaKRtQUh_5KOkvc2SuGxrymv_BtQm1iMMPnAj1yAhz40ktygo/exec';
 
   try {
     const response = await fetch(APPS_SCRIPT_URL, {
@@ -25,8 +25,7 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(req.body),
-      redirect: 'follow'
+      body: JSON.stringify(req.body)
     });
 
     const result = await response.json();
