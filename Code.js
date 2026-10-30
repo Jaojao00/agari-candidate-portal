@@ -70,6 +70,15 @@ function submitCandidateForm(formData) {
       setupSheetHeader(sheet);
     } else if (sheet.getLastRow() === 0) {
       setupSheetHeader(sheet);
+    } else {
+      // Đảm bảo tiêu đề cột AB luôn có nếu sheet đã tồn tại từ trước
+      if (sheet.getRange(1, 28).getValue() === "") {
+        sheet.getRange(1, 28).setValue("Địa chỉ thường trú ghi đúng như trên căn cước")
+          .setFontWeight("bold").setBackground("#0f766e").setFontColor("#ffffff");
+      }
+      if (sheet.getRange(1, 17).getValue() === "Địa chỉ thường trú (theo CCCD) Mới") {
+        sheet.getRange(1, 17).setValue("Địa chỉ thường trú ( theo địa sát nhập mới )");
+      }
     }
 
     // Kết nối thư mục Drive lưu ảnh
@@ -114,7 +123,7 @@ function submitCandidateForm(formData) {
       "'" + (formData.cccd || ""),
       formData.ngayCapCccd || "",
       formData.noiCapCccd || "",
-      formData.diaChiThuongTruNganHang || formData.diaChiThuongTru || "",
+      formData.diaChiThuongTru || "",
       formData.email || "",
       cccdFrontLink,
       cccdBackLink,
@@ -124,7 +133,8 @@ function submitCandidateForm(formData) {
       vneidQuanHeLink,
       "'" + (formData.soTaiKhoan || ""),
       formData.chuTaiKhoan || "",
-      formData.tenNganHang || ""
+      formData.tenNganHang || "",
+      formData.diaChiThuongTruNganHang || ""
     ];
 
     sheet.appendRow(rowData);
@@ -171,7 +181,8 @@ function sendNotificationEmail(data, submitTime, links) {
           <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Số CCCD:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.cccd}</td></tr>
           <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Số điện thoại:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.dienThoai}</td></tr>
           <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Email:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.email}</td></tr>
-          <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Địa chỉ thường trú:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.diaChiThuongTruNganHang || data.diaChiThuongTru}</td></tr>
+          <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Địa chỉ thường trú (sáp nhập mới):</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.diaChiThuongTru || ""}</td></tr>
+          <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Địa chỉ thường trú (theo CCCD gốc):</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.diaChiThuongTruNganHang || ""}</td></tr>
           <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Tài khoản ngân hàng:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.soTaiKhoan} (${data.tenNganHang}) - ${data.chuTaiKhoan}</td></tr>
         </table>
 
@@ -224,11 +235,12 @@ function setupSheetHeader(sheet) {
     "Thời gian nộp", "Mã nhân viên", "ID HRM (CCCD)", "Họ tên VN - có dấu",
     "Họ tên EN - không dấu", "Giới tính", "Ngày sinh", "Tháng sinh", "Năm sinh",
     "Ngày tháng năm sinh", "Quốc tịch", "Dân tộc", "Điện thoại (Thuê bao chính chủ)",
-    "Số CCCD", "Ngày cấp CCCD", "Nơi cấp CCCD", "Địa chỉ thường trú (theo CCCD) Mới",
+    "Số CCCD", "Ngày cấp CCCD", "Nơi cấp CCCD", "Địa chỉ thường trú ( theo địa sát nhập mới )",
     "Email", "Link Ảnh CCCD Mặt trước", "Link Ảnh CCCD Mặt sau",
     "Link Ảnh SMS xác minh thuê bao chính chủ", "Ảnh VneID Định danh mức 2",
     "Ảnh Chủ hộ VneID", "Ảnh VneID thể hiện mối quan hệ",
-    "Số tài khoản", "Chủ tài khoản EN - không dấu", "Tên ngân hàng"
+    "Số tài khoản", "Chủ tài khoản EN - không dấu", "Tên ngân hàng",
+    "Địa chỉ thường trú ghi đúng như trên căn cước"
   ];
   sheet.appendRow(headers);
   sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold").setBackground("#0f766e").setFontColor("#ffffff");
