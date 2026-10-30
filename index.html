@@ -133,8 +133,15 @@
             </select>
           </div>
           <div class="sm:col-span-2">
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Địa chỉ thường trú (theo CCCD) Mới <span class="text-red-500">*</span></label>
-            <textarea name="diaChiThuongTru" rows="2" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Số nhà, đường/phố, Thôn/Xóm, Phường/Xã, Quận/Huyện, Tỉnh/TP..."></textarea>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold text-slate-600 uppercase">
+                Địa chỉ thường trú ( theo địa sát nhập mới ) <span class="text-red-500">*</span>
+              </label>
+              <button type="button" onclick="openGuide('satnhap')" class="inline-flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-sm transition">
+                <i class="fa-solid fa-circle-question"></i> HƯỚNG DẪN
+              </button>
+            </div>
+            <textarea name="diaChiThuongTru" id="diaChiThuongTru" rows="2" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Số nhà, đường/phố, Thôn/Xóm, Phường/Xã, Quận/Huyện, Tỉnh/TP..."></textarea>
           </div>
         </div>
       </div>
@@ -239,6 +246,8 @@
             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Chủ tài khoản EN - không dấu <span class="text-red-500">*</span></label>
             <input type="text" name="chuTaiKhoan" oninput="this.value = removeVietnameseTones(this.value).toUpperCase()" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none uppercase font-semibold" placeholder="NGUYEN VAN A">
           </div>
+          <a></a> 
+          <p></p>
           <div class="sm:col-span-2">
             <div class="flex items-center justify-between mb-1">
               <label class="block text-xs font-bold text-slate-600 uppercase">
@@ -336,6 +345,29 @@
         images: [
           "https://i.imgur.com/QPGYgeQ.jpeg"
         ]
+      },
+      satnhap: {
+        title: "HƯỚNG DẪN: TRA CỨU ĐỊA CHỈ SÁP NHẬP MỚI",
+        steps: [
+          {
+            title: "Bước 1: Truy cập link tra cứu sáp nhập",
+            desc: "Bấm vào nút dưới đây để mở công cụ tra cứu địa chỉ sáp nhập mới:",
+            link: "https://tienich.vnhub.com/",
+            linkText: "tienich.vnhub.com"
+          },
+          {
+            title: "Bước 2: Nhập địa chỉ đúng theo căn cước gốc",
+            image: "https://i.imgur.com/QPGYgeQ.jpeg"
+          },
+          {
+            title: "Bước 3: Bấm tra cứu sau đó sao chép như trên ảnh, dán vào là được",
+            image: "https://cdn.phototourl.com/member/2026-10-30-f4921a74-3f8b-46bf-a0f5-761cc08c3245.jpg"
+          },
+          {
+            title: "Bước 4: Dán vào ô thông tin là xong (chú ý nha)",
+            image: "https://cdn.imagetourls.com/uploads/tyImg/15Z7m30Kb.jpg"
+          }
+        ]
       }
     };
 
@@ -350,14 +382,45 @@
       titleEl.innerHTML = `<i class="fa-solid fa-circle-info"></i> ` + item.title;
       bodyEl.innerHTML = "";
 
-      item.images.forEach((imgUrl, idx) => {
-        const img = document.createElement("img");
-        img.src = imgUrl;
-        img.referrerPolicy = "no-referrer"; // Chống bị chặn khi tải từ Imgur
-        img.className = "w-full rounded-xl shadow-md border border-slate-200 mx-auto object-contain";
-        img.alt = "Ảnh hướng dẫn " + (idx + 1);
-        bodyEl.appendChild(img);
-      });
+      if (item.steps) {
+        item.steps.forEach((step, idx) => {
+          const stepDiv = document.createElement("div");
+          stepDiv.className = "p-3.5 bg-white rounded-xl border border-slate-200 shadow-sm space-y-2";
+          
+          let html = `<div class="font-bold text-teal-800 text-xs sm:text-sm flex items-center gap-2">
+            <span class="bg-teal-700 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shrink-0">${idx + 1}</span>
+            <span>${step.title}</span>
+          </div>`;
+
+          if (step.desc) {
+            html += `<p class="text-xs text-slate-600">${step.desc}</p>`;
+          }
+
+          if (step.link) {
+            html += `<div>
+              <a href="${step.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> ${step.linkText || step.link}
+              </a>
+            </div>`;
+          }
+
+          if (step.image) {
+            html += `<img src="${step.image}" referrerpolicy="no-referrer" class="w-full rounded-lg border border-slate-200 object-contain max-h-[350px] mx-auto" alt="${step.title}">`;
+          }
+
+          stepDiv.innerHTML = html;
+          bodyEl.appendChild(stepDiv);
+        });
+      } else if (item.images) {
+        item.images.forEach((imgUrl, idx) => {
+          const img = document.createElement("img");
+          img.src = imgUrl;
+          img.referrerPolicy = "no-referrer"; // Chống bị chặn khi tải từ Imgur
+          img.className = "w-full rounded-xl shadow-md border border-slate-200 mx-auto object-contain";
+          img.alt = "Ảnh hướng dẫn " + (idx + 1);
+          bodyEl.appendChild(img);
+        });
+      }
 
       modal.classList.remove("hidden");
     }
@@ -478,21 +541,6 @@
         status.innerText = "Lỗi kết nối máy chủ: " + err.message;
       }
     }
-
-    // Tự động đồng bộ địa chỉ giữa Mục 2 và Mục 4
-    document.addEventListener("DOMContentLoaded", () => {
-      const dc2 = document.querySelector('textarea[name="diaChiThuongTru"]');
-      const dc4 = document.getElementById('diaChiThuongTruNganHang');
-      if (dc2 && dc4) {
-        dc2.addEventListener('input', () => {
-          if (!dc4.dataset.touched) dc4.value = dc2.value;
-        });
-        dc4.addEventListener('input', () => {
-          dc4.dataset.touched = "true";
-          if (!dc2.value) dc2.value = dc4.value;
-        });
-      }
-    });
   </script>
 </body>
 </html>
