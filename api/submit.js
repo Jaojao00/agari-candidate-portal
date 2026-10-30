@@ -1,3 +1,7 @@
+export const config = {
+  maxDuration: 60,
+};
+
 export default async function handler(req, res) {
   // Bật CORS cho phép gọi API
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -28,7 +32,18 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body)
     });
 
-    const result = await response.json();
+    const text = await response.text();
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (parseErr) {
+      console.error('Phản hồi từ Google Apps Script không phải JSON:', text);
+      return res.status(500).json({
+        success: false,
+        message: 'Lỗi phản hồi từ Google: ' + (text.substring(0, 150) || 'Không có phản hồi')
+      });
+    }
+
     return res.status(200).json(result);
   } catch (error) {
     console.error('Lỗi kết nối Google Apps Script:', error);
