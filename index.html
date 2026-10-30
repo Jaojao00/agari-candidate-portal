@@ -239,6 +239,18 @@
             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Chủ tài khoản EN - không dấu <span class="text-red-500">*</span></label>
             <input type="text" name="chuTaiKhoan" oninput="this.value = removeVietnameseTones(this.value).toUpperCase()" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none uppercase font-semibold" placeholder="NGUYEN VAN A">
           </div>
+          <div class="sm:col-span-2">
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-xs font-bold text-slate-600 uppercase">
+                Địa chỉ thường trú ghi đúng như trên căn cước <span class="text-red-500">*</span>
+              </label>
+              <button type="button" onclick="openGuide('diachi_cccd')" class="inline-flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-sm transition">
+                <i class="fa-solid fa-circle-question"></i> HƯỚNG DẪN
+              </button>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-1">Vui lòng ghi đúng theo căn cước</p>
+            <textarea name="diaChiThuongTruNganHang" id="diaChiThuongTruNganHang" rows="2" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Vui lòng ghi đúng theo căn cước"></textarea>
+          </div>
         </div>
       </div>
 
@@ -317,6 +329,12 @@
           "https://i.imgur.com/L8xAZpE.jpeg",
           "https://i.imgur.com/W27XxWz.jpeg",
           "https://i.imgur.com/qH8rPZ3.jpeg"
+        ]
+      },
+      diachi_cccd: {
+        title: "HƯỚNG DẪN: ĐỊA CHỈ THƯỜNG TRÚ THEO CĂN CƯỚC",
+        images: [
+          "https://i.imgur.com/QPGYgeQ.jpeg"
         ]
       }
     };
@@ -460,6 +478,21 @@
         status.innerText = "Lỗi kết nối máy chủ: " + err.message;
       }
     }
+
+    // Tự động đồng bộ địa chỉ giữa Mục 2 và Mục 4
+    document.addEventListener("DOMContentLoaded", () => {
+      const dc2 = document.querySelector('textarea[name="diaChiThuongTru"]');
+      const dc4 = document.getElementById('diaChiThuongTruNganHang');
+      if (dc2 && dc4) {
+        dc2.addEventListener('input', () => {
+          if (!dc4.dataset.touched) dc4.value = dc2.value;
+        });
+        dc4.addEventListener('input', () => {
+          dc4.dataset.touched = "true";
+          if (!dc2.value) dc2.value = dc4.value;
+        });
+      }
+    });
   </script>
 </body>
 </html>

@@ -114,7 +114,7 @@ function submitCandidateForm(formData) {
       "'" + (formData.cccd || ""),
       formData.ngayCapCccd || "",
       formData.noiCapCccd || "",
-      formData.diaChiThuongTru || "",
+      formData.diaChiThuongTruNganHang || formData.diaChiThuongTru || "",
       formData.email || "",
       cccdFrontLink,
       cccdBackLink,
@@ -171,7 +171,7 @@ function sendNotificationEmail(data, submitTime, links) {
           <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Số CCCD:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.cccd}</td></tr>
           <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Số điện thoại:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.dienThoai}</td></tr>
           <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Email:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.email}</td></tr>
-          <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Địa chỉ thường trú:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.diaChiThuongTru}</td></tr>
+          <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Địa chỉ thường trú:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.diaChiThuongTruNganHang || data.diaChiThuongTru}</td></tr>
           <tr style="background: #f0fdfa;"><td style="padding: 8px; border: 1px solid #ddd;"><strong>Tài khoản ngân hàng:</strong></td><td style="padding: 8px; border: 1px solid #ddd;">${data.soTaiKhoan} (${data.tenNganHang}) - ${data.chuTaiKhoan}</td></tr>
         </table>
 
